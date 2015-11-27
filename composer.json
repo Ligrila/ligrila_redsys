@@ -1,0 +1,21 @@
+{
+    "name": "ligrila/redsys",
+    "description": "BBVA Redsys Payment API implementation with new SHA2 HMAC-256 algorithm",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Leandro Lopez",
+            "email": "leandro@ligrila.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {},
+    "autoload": {
+        "classmap": [
+            "lib/RedsysAPI.php"
+        ],
+        "psr-4": {
+            "Ligrila\\Payment\\": "src"
+        }
+    }
+}
