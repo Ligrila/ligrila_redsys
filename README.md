@@ -55,7 +55,6 @@ Parse Response Example
 
 use Ligrila\Payment\Redsys;
 use Ligrila\Payment\RedsysConfig;
-use Ligrila\Payment\RedsysOrder;
 
 
 $config = new RedsysConfig(
