@@ -39,7 +39,7 @@ $result = $redsys->parseResponse();
 
 _log($result); //log to file, because this request is made in background
 
-if ($response['accepted']) {
+if ($result['accepted']) {
     //payment accepted
 } else {
     //payment refused
