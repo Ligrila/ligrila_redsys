@@ -64,7 +64,6 @@ class Redsys
         $Ds_Merchant_UrlKO = $this->config->Ds_Merchant_UrlKO;
         $Ds_Merchant_Password = $this->config->Ds_Merchant_Password;
         $Ds_SignatureVersion = $this->config->Ds_SignatureVersion;
-        $Ds_SignatureVersion = $this->config->Ds_SignatureVersion;
         $Ds_Merchant_ConsumerLanguage = $this->config->Ds_Merchant_ConsumerLanguage;
         /*order*/
         $Ds_Merchant_Order = $order->getOrderID();
