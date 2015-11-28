@@ -64,6 +64,7 @@ class Redsys
         $Ds_Merchant_UrlKO = $this->config->Ds_Merchant_UrlKO;
         $Ds_Merchant_Password = $this->config->Ds_Merchant_Password;
         $Ds_SignatureVersion = $this->config->Ds_SignatureVersion;
+        $Ds_SignatureVersion = $this->config->Ds_SignatureVersion;
         $Ds_Merchant_ConsumerLanguage = $this->config->Ds_Merchant_ConsumerLanguage;
         /*order*/
         $Ds_Merchant_Order = $order->getOrderID();
@@ -87,7 +88,7 @@ class Redsys
 
         $Ds_MerchantParameters = $api->createMerchantParameters();
         $Ds_Signature = $api->createMerchantSignature($Ds_Merchant_Password);
-        $Ds_SignatureVersion = 'HMAC_SHA256_V1';
+
 
         return array(
                     'Ds_MerchantParameters' => $Ds_MerchantParameters,
