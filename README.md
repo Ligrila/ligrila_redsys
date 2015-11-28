@@ -39,7 +39,7 @@ $config = new RedsysConfig(
 
 $order = new RedsysOrder();
     $order->setAmount(100)
-    ->setCurrency('GBP')
+    ->setCurrency('GBP')  // ISO 4217 Code
     ->setProductDescription('product1');
 
 $redsys = new Redsys($config);

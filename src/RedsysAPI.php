@@ -35,10 +35,10 @@ class RedsysAPI implements \ArrayAccess
     }
     
     public function getKey($password,$order){
-            $bytes = array(0,0,0,0,0,0,0,0);
-            $iv = implode(array_map("chr", $bytes));
-            $key = mcrypt_encrypt(MCRYPT_3DES, $password, $order, MCRYPT_MODE_CBC, $iv);
-            return $key;
+        $bytes = array(0,0,0,0,0,0,0,0);
+        $iv = implode(array_map("chr", $bytes));
+        $key = mcrypt_encrypt(MCRYPT_3DES, $password, $order, MCRYPT_MODE_CBC, $iv);
+        return $key;
     }
     
     public function getSignature($password){
