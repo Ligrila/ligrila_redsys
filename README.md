@@ -2,6 +2,11 @@
 
 BBVA Redsys Payment API implementation with new SHA2 HMAC-256 algorithm
 
+Install
+========
+```shell
+composer require ligrila/redsys
+```
 
 Example
 =======
