@@ -52,7 +52,10 @@ echo $html;
 Parse Response Example
 ======================
 ```php
-$checkoutUrl = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+use Ligrila\Payment\Redsys;
+use Ligrila\Payment\RedsysConfig;
+use Ligrila\Payment\RedsysOrder;
 
 
 $config = new RedsysConfig(
