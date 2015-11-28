@@ -11,9 +11,6 @@
     "require": {},
     "require-dev": {},
     "autoload": {
-        "classmap": [
-            "lib/RedsysAPI.php"
-        ],
         "psr-4": {
             "Ligrila\\Payment\\": "src"
         }

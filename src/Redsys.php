@@ -16,17 +16,16 @@ class Redsys
         $ret = array('accepted' => false,'error' => 'Invalid request','amount' => 0);
 
         if (!empty($params['Ds_MerchantParameters']) && !empty($params['Ds_Signature'])) {
-            $api = new \RedsysAPI();
+            $api = new RedsysAPI();
             $version = $params['Ds_SignatureVersion'];
             $data = $params['Ds_MerchantParameters'];
             $requestSignature = $params['Ds_Signature'];
 
-            $dataDecodec = $api->decodeMerchantParameters($data);
+            $api->setEncodedParameters($data);
 
-            $s = $api->createMerchantSignatureNotif($this->config->Ds_Merchant_Password, $data);
-            $dataDecodec = json_decode($dataDecodec, true);
+            $s = $api->getReponseSignature($this->config['Ds_Merchant_Password']);
 
-            $code = (int) $dataDecodec['Ds_Response'];
+            $code = (int) $api['Ds_Response'];
 
             if ($s != $requestSignature) {
                 $ret = array(
@@ -37,7 +36,7 @@ class Redsys
             } else {
                 if ($code <= 99) {
                     $ret = array(
-                        'amount' => $dataDecodec['Ds_Amount'] / 100,
+                        'amount' => $api['Ds_Amount'] / 100,
                         'accepted' => true,
                         'error' => false,
                         );
@@ -57,14 +56,14 @@ class Redsys
     public function checkoutParams(RedsysOrder $order)
     {
         /*config*/
-        $Ds_Merchant_MerchantCode = $this->config->Ds_Merchant_MerchantCode;
-        $Ds_Merchant_Terminal = $this->config->Ds_Merchant_Terminal;
-        $Ds_Merchant_MerchantURL = $this->config->Ds_Merchant_MerchantURL;
-        $Ds_Merchant_UrlOK = $this->config->Ds_Merchant_UrlOK;
-        $Ds_Merchant_UrlKO = $this->config->Ds_Merchant_UrlKO;
-        $Ds_Merchant_Password = $this->config->Ds_Merchant_Password;
-        $Ds_SignatureVersion = $this->config->Ds_SignatureVersion;
-        $Ds_Merchant_ConsumerLanguage = $this->config->Ds_Merchant_ConsumerLanguage;
+        $Ds_Merchant_MerchantCode = $this->config['Ds_Merchant_MerchantCode'];
+        $Ds_Merchant_Terminal = $this->config['Ds_Merchant_Terminal'];
+        $Ds_Merchant_MerchantURL = $this->config['Ds_Merchant_MerchantURL'];
+        $Ds_Merchant_UrlOK = $this->config['Ds_Merchant_UrlOK'];
+        $Ds_Merchant_UrlKO = $this->config['Ds_Merchant_UrlKO'];
+        $Ds_Merchant_Password = $this->config['Ds_Merchant_Password'];
+        $Ds_SignatureVersion = $this->config['Ds_SignatureVersion'];
+        $Ds_Merchant_ConsumerLanguage = $this->config['Ds_Merchant_ConsumerLanguage'];
         /*order*/
         $Ds_Merchant_Order = $order->getOrderID();
         $Ds_Merchant_TransactionType = $order->getTransactionType();
@@ -72,21 +71,23 @@ class Redsys
         $Ds_Merchant_Amount = $order->getAmount();
         $Ds_Merchant_ProductDescription = $order->getProductDescription();
 
-        $api = new \RedsysAPI();
-        $api->setParameter('DS_MERCHANT_AMOUNT', (string) $Ds_Merchant_Amount);
-        $api->setParameter('DS_MERCHANT_ORDER', $Ds_Merchant_Order);
-        $api->setParameter('DS_MERCHANT_MERCHANTCODE', $Ds_Merchant_MerchantCode);
-        $api->setParameter('DS_MERCHANT_CURRENCY', $Ds_Merchant_Currency);
-        $api->setParameter('DS_MERCHANT_TRANSACTIONTYPE', $Ds_Merchant_TransactionType);
-        $api->setParameter('DS_MERCHANT_TERMINAL', $Ds_Merchant_Terminal);
-        $api->setParameter('DS_MERCHANT_MERCHANTURL', $Ds_Merchant_MerchantURL);
-        $api->setParameter('DS_MERCHANT_URLOK', $Ds_Merchant_UrlOK);
-        $api->setParameter('DS_MERCHANT_URLKO', $Ds_Merchant_UrlKO);
-        $api->setParameter('DS_MERCHANT_PRODUCTDESCRIPTION', $Ds_Merchant_ProductDescription);
-        $api->setParameter('DS_MERCHANT_CONSUMERLANGUAGE', $Ds_Merchant_ConsumerLanguage);
+        $api = new RedsysAPI();
+        $api['Ds_Merchant_Amount'] = $Ds_Merchant_Amount;
+        $api['Ds_Merchant_Order'] = $Ds_Merchant_Order;
+        $api['Ds_Merchant_MerchantCode'] = $Ds_Merchant_MerchantCode;
+        $api['DS_Merchant_Currency'] = $Ds_Merchant_Currency;
+        $api['Ds_Merchant_TransactionType'] = $Ds_Merchant_TransactionType;
+        $api['Ds_Merchant_Terminal'] = $Ds_Merchant_Terminal;
+        $api['Ds_Merchant_MerchantURL'] = $Ds_Merchant_MerchantURL;
+        $api['Ds_Merchant_UrlOK'] = $Ds_Merchant_UrlOK;
+        $api['Ds_Merchant_UrlKO'] = $Ds_Merchant_UrlKO;
+        $api['Ds_Merchant_ProductDescription'] = $Ds_Merchant_ProductDescription;
+        $api['Ds_Merchant_ConsumerLanguage'] = $Ds_Merchant_ConsumerLanguage;
+    
 
-        $Ds_MerchantParameters = $api->createMerchantParameters();
-        $Ds_Signature = $api->createMerchantSignature($Ds_Merchant_Password);
+        $Ds_MerchantParameters = $api->getEncodedParameters();
+        $Ds_Signature = $api->getSignature($Ds_Merchant_Password);
+
 
 
         return array(
@@ -117,12 +118,12 @@ class Redsys
 
     protected function generateForm($fields)
     {
-        $form = $this->config->checkoutLoading.'
+        $form = $this->config['checkoutLoading'].'
                         <form action="'.$this->config->getCheckoutUrl().'" id="redsys_standard_checkout" name="redsys" method="post">
                         '.$fields.'
-                        <input type="submit" value="'.$this->config->checkoutText.'"></input>
+                        <input type="submit" value="'.$this->config['checkoutText'].'"></input>
                         </form>';
-        if ($this->config->autoRedirect) {
+        if ($this->config['autoRedirect']) {
             $form .= '<script type="text/javascript">document.getElementById("redsys_standard_checkout").submit(); </script>';
         }
 
